@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Game</title>
+    <style>
+        *{
+            font-family: 'Gilroy-Regular';
+            box-sizing: border-box;
+        }
+        html,body{
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #main{
+            width: 100%;
+            height: 100%;
+            background-color: rgb(155, 219, 155);
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+        #white{
+            height: 80%;
+            width: 80%;
+            background-color: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        #ptop{
+            background-color: rgb(34, 151, 34);
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0px 20px;
+            gap: 60px;
+            align-items: center;
+            justify-content: center;
+        }
+        #ptop #elem{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        #ptop #elem #box{
+            background-color: #fff;
+            padding: 9px;
+            border-radius: 3px;
+        }
+        #pbtm{
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px 12px;
+            gap: 10px;
+            width: 100%;
+            height: calc(100%-100px);
+        }
+        #pbtm #bubble{
+            border-radius: 50%;
+            width: 50px;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            color: #fff;
+            font-weight: 700;
+            height: 50px;
+            background-color:rgb(80, 193, 80);
+        }
+        #pbtm #bubble:hover{
+            cursor: pointer;
+            background-color: rgb(13, 66, 13);
+        }
+        #timeout{
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            opacity: 0;
+        }
+        #timeout h1{
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 8vw;
+
+        }#timeout h4{
+            position: absolute;
+            top:55%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            font-size: 2vw;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="white">
+            <div id="ptop">
+                <div id="elem">
+                    <h2>Hit</h2>
+                    <div class="hit" id="box">5</div>
+                </div>
+                <div id="elem">
+                    <h2>Timer</h2>
+                    <div class="timer" id="box">60</div>
+                </div>
+                <div id="elem">
+                    <h2>Score</h2>
+                    <div class="scoreval" id="box">0</div>
+                </div>
+            </div>
+            <div id="pbtm">
+                <div id="bubble">5</div>
+            </div>
+        </div>
+    </div>
+    <div id="timeout">
+        <h1>Time Out</h1>
+        <h4>Sorry, You are out of time.</h4>
+    </div>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var ble = "";
+        var time = 60;
+        var scorevalue = 0;
+        function score(){
+            scorevalue += 10;
+            document.querySelector(".scoreval").textContent = scorevalue;
+        }
+        function createBubble(){
+            for(var i = 1;i<=120;i++){
+                var val = Math.floor(Math.random()*10)
+                ble += `<div id="bubble">${val}</div>`;
+            }
+            document.querySelector("#pbtm").innerHTML = ble;
+        }
+        function hit(){
+            var hit_value = Math.floor(Math.random()*10);
+            document.querySelector(".hit").textContent = hit_value;
+        }
+        function timer(){
+            setInterval(function(){
+                if (time > 0){
+                    time -= 1;
+                    document.querySelector(".timer").textContent = time;
+                }
+                else{
+                    animate();
+                    clearInterval(time);
+                }
+            },1000)
+        }
+        function cl(){
+            document.querySelector("#pbtm").addEventListener("click",function(dets){
+                var valcheck = dets.target;
+                if (valcheck.textContent === document.querySelector(".hit").textContent){
+                    score();
+                    document.querySelector("#pbtm").innerHTML = ble;    
+                    hit();
+                }
+            });
+        }
+        function animate(){
+            gsap.to("#white",{
+                height:0
+            })
+            gsap.to("#main",{
+                height:0
+            })
+            gsap.to("#timeout",{
+                opacity:1
+            })
+        }
+        cl();
+        timer();
+        hit();
+        createBubble();
+    </script>
+    
+</body>
+</html>
